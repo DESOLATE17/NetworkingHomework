@@ -6,51 +6,43 @@ let isPolling = false; // текущее состояние запросов
 const generatingPolynomial = "1011";
 let verificationMatrix = ["1", "10", "100", "11", "110", "111", "101"];
 
-let corruptedPolynomial;
-let encodedPolynomial;
-let errorCount; 
-let originalPolynomial;
+let corrupted_polynomial;
+let encoded_polynomial;
+let error_count; 
+let original_polynomial;
 
 const decoding = (data) => {
-	({corruptedPolynomial, encodedPolynomial, errorCount, originalPolynomial} = data);
+	({corrupted_polynomial, encoded_polynomial, error_count, original_polynomial} = data);
 
-	const remainder = getDividingRemainder(corruptedPolynomial);
+	const remainder = getRemainder(corrupted_polynomial);
 
 	let index = verificationMatrix.findIndex(element => element === remainder);
 
-	let decodedPolynomial = corruptedPolynomial.slice(0, corruptedPolynomial.length - 3);
+	let decodedPolynomial = corrupted_polynomial.slice(0, corrupted_polynomial.length - 3);
 
 	if (index < 0) {
-		if (originalPolynomial === decodedPolynomial) {
-			return message(originalPolynomial,
-			 encodedPolynomial, corruptedPolynomial, decodedPolynomial, errorCount,
-			 1);
+		if (original_polynomial === decodedPolynomial) {
+			return message(original_polynomial, encoded_polynomial, corrupted_polynomial, decodedPolynomial, error_count, 1);
 		} else {
-			return message(originalPolynomial,
-			 encodedPolynomial, corruptedPolynomial, decodedPolynomial, errorCount,
-			 4);
+			return message(original_polynomial, encoded_polynomial, corrupted_polynomial, decodedPolynomial, error_count, 4);
 		}
 	} else {
-		index = corruptedPolynomial.length - index - 1;
+		index = corrupted_polynomial.length - index - 1;
 
-		let correctedPolynomial = corruptedPolynomial.substring(0, index) + String(corruptedPolynomial[index] ^ 1) + 
-				corruptedPolynomial.substring(index + 1);
+		let correctedPolynomial = corrupted_polynomial.substring(0, index) + String(corrupted_polynomial[index] ^ 1) + 
+				corrupted_polynomial.substring(index + 1);
 
-		decodedPolynomial = correctedPolynomial.slice(0, corruptedPolynomial.length - 3);
+		decodedPolynomial = correctedPolynomial.slice(0, corrupted_polynomial.length - 3);
 
-		if (originalPolynomial === decodedPolynomial) {
-			return message(originalPolynomial,
-			 encodedPolynomial, corruptedPolynomial, decodedPolynomial, errorCount,
-			 2);
+		if (original_polynomial === decodedPolynomial) {
+			return message(original_polynomial, encoded_polynomial, corrupted_polynomial, decodedPolynomial, error_count, 2);
 		} else {
-			return message(originalPolynomial,
-			 encodedPolynomial, corruptedPolynomial, decodedPolynomial, errorCount,
-			 3)
+			return message(original_polynomial, encoded_polynomial, corrupted_polynomial, decodedPolynomial, error_count, 3)
 		}
 	}
 }
 
-const getDividingRemainder = (polynomial) => {
+const getRemainder = (polynomial) => {
 	let indexEnd = generatingPolynomial.length - 1;
 	let currentDigit = polynomial.slice(0, indexEnd + 1);
 	let remainder;
@@ -125,7 +117,6 @@ const finishConnectToServer = () => {
 
 startButton.addEventListener("click", startConnectToServer);
 finishButton.addEventListener("click", finishConnectToServer);
-
 
 const statusList = {
 	1: "Ошибки не было",

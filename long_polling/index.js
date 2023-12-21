@@ -4,6 +4,8 @@ const path = require("path"); // импорт библиотеки path для �
 const app = express(); // создание экземпляра приложения express
 const PORT = 3000; // присвоения порта
 
+const generating = "1011"; // порождающий полином
+
 const MAX_RESPONSE_TIMEOUT = 4000;
 const MAX_TIMEOUT = 5000; // максимальное время ожидания ответа
 const MIN_TIMEOUT = 1000; // минимальное время ожидания
@@ -12,8 +14,6 @@ const MIN_VALUE = 1; // минимальное значение случайно
 const ENCODED_POLY_LEN = 7;
 const POLY_LEN = 4;
 
-// порождающий полином для c(7,4)
-const generatingPolynomial = "1011";
 // настройка для передачи статических файлов (__dirname - текущая директория)
 // метод join используется для соединения путей с учётом особенностей операционной системы
 app.use(express.static(path.join(__dirname, "frontend")));
@@ -38,19 +38,17 @@ app.get("/long-polling-request", (req, res) => {
 		original = "0" + original;
 	}
 	let encoded = original + "000";
-  // остаток от деления на образующий полином
+
 	let remainder = getDividingRemainder(encoded);
 	while (remainder.length < ENCODED_POLY_LEN - POLY_LEN) {
-    // добавляем нулевые биты, чтобы добиться фиксированной длины строки - 3 символа
 		remainder = "0" + remainder;
 	}
-  // 4 бита сообщения + 3 бита контрольных на основе остатка
+
 	encoded = (parseInt(encoded, 2) + parseInt(remainder, 2)).toString(2);
 	while (encoded.length < ENCODED_POLY_LEN) {
 		encoded = "0" + encoded;
 	}
-	let corrupted;
-
+	let corrupted = encoded;
 	// рандомим количество ошибок (от 0 до 2)
 	let errorCount = Math.round(Math.random() * 2);
 
@@ -84,14 +82,8 @@ app.listen(PORT, () => {
 const makeOneErr = (corrupted) => {
 	// рандомим позицию ошибки
 	let errIndex = Math.round(Math.random() * (ENCODED_POLY_LEN - 1));
-
-	// строки в js неизменяемы, нужно перегонять в массив
 	const encodedArr = corrupted.split("");
-
-	// меняем бит на противоположный
 	encodedArr[errIndex] = encodedArr[errIndex] === "0" ? "1" : "0";
-
-	// собираем обратно в строку
 	corrupted = encodedArr.join("");
 
 	return corrupted;
@@ -116,23 +108,23 @@ const makeTwoErr = (corrupted) => {
 };
 
 const getDividingRemainder = (polynomial) => {
-	let indexEnd = generatingPolynomial.length - 1;
+	let indexEnd = generating.length - 1;
 	let currentDigit = polynomial.slice(0, indexEnd + 1);
 	let remainder;
 
 	while (indexEnd < polynomial.length) {
-		remainder = (parseInt(currentDigit, 2) ^ parseInt(generatingPolynomial, 2)).toString(2);
+		remainder = (parseInt(currentDigit, 2) ^ parseInt(generating, 2)).toString(2);
 		currentDigit = remainder;
 
 		if (++indexEnd < polynomial.length) {
 			while (
 				indexEnd < polynomial.length &&
-				currentDigit.length < generatingPolynomial.length
+				currentDigit.length < generating.length
 			) {
 				currentDigit += polynomial[indexEnd++];
 			}
 
-			if (currentDigit.length < generatingPolynomial.length) {
+			if (currentDigit.length < generating.length) {
 				remainder = currentDigit;
 			} else {
 				indexEnd--;
@@ -140,8 +132,8 @@ const getDividingRemainder = (polynomial) => {
 		}
 	}
 
-	if (remainder.length > generatingPolynomial.length - 1) {
-		remainder = (parseInt(currentDigit, 2) ^ parseInt(generatingPolynomial, 2)).toString(2);
+	if (remainder.length > generating.length - 1) {
+		remainder = (parseInt(currentDigit, 2) ^ parseInt(generating, 2)).toString(2);
 	}
 
 	return remainder;
