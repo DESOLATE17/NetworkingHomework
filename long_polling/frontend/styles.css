@@ -1,69 +1,115 @@
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
+	box-sizing: border-box;
 }
 
-body, ol, h1 {
-    margin: 0;
-    padding: 0;
+body,
+ol,
+h1 {
+	margin: 0;
+	padding: 0;
 }
 
 body {
-    font-family: Arial, serif;
-    background-color: #fcdde3;
+	font-family: Arial, serif;
+	background-color: #000000;
+	color: #ffffff;
 }
 
 .container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 20px;
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 20px;
 }
 
 h1 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
+	font-size: 24px;
+	font-weight: bold;
+	margin-bottom: 20px;
 }
 
 .buttons__wrapper {
-    margin-top: 30px;
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    flex-wrap: wrap;
+	margin-top: 30px;
+	display: flex;
+	align-items: center;
+	gap: 30px;
+	flex-wrap: wrap;
 }
 
 .button {
-    padding: 10px 15px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 8px;
-    border: none;
-    background-color: cornflowerblue;
-    color: #fff;
+	padding: 10px 15px;
+	font-size: 16px;
+	cursor: pointer;
+	border-radius: 8px;
+	border: none;
+	background-color: #065f46;
+	color: #f0f2f8;
 }
 
 .list {
-    font-size: 18px;
-    list-style-position: inside;
+	font-size: 18px;
+	list-style-position: inside;
 }
 
 .list li {
-    margin-top: 10px;
+	margin-top: 10px;
 }
 
 .list li:first-child {
-    margin-top: 0;
+	margin-top: 0;
 }
 
 .bold {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 
 .button:disabled {
-    cursor: default;
-    background-color: #99B1EEFF;
+	cursor: default;
+	background-color: #065f46;
+}
+
+.responses {
+	margin-top: 0.8em;
+}
+
+.message {
+	padding: 0.5em;
+	border-radius: 0.5em;
+}
+
+.message-1 {
+	background-color: rgba(51, 127, 59, 0.67);
+}
+
+.message-2 {
+	background-color: rgba(43, 90, 47, 0.67);
+}
+
+.message-3 {
+	background-color: #7b7436;
+}
+
+.message-4 {
+	background-color: rgb(78, 31, 25);
+}
+
+.errors_count {
+	font-size: 1.2em;
+	margin-bottom: 0.3em;
+}
+
+.comparison {
+	width: 100%;
+	display: grid;
+	grid-template-columns: 30% 30%;
+	margin-bottom: 0.3em;
+}
+
+.comparison__message {
+	display: flex;
+	justify-content: space-between;
+	margin-right: 3em;
 }
 
